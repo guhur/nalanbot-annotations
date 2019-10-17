@@ -19,4 +19,4 @@ def get_config(sub: Optional[str] = None) -> Dict[str, Any]:
     except yaml.YAMLError as err:
         logging.error(err)
 
-    return config[sub]
+    return config if sub is None else config[sub]

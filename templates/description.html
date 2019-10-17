@@ -1,4 +1,6 @@
-{% extends mturk.html %}
+{% extends 'mturk.html' %}
+
+{% block page %}
 <html>
   <head>
     <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
@@ -10,26 +12,22 @@
 
     <crowd-instructions link-text="View instructions" link-type="button">
         {% block instructions %}
-              {% include 'stepbystep-instructions.html' %}
+              {% include 'description-instructions.html' %}
         {% endblock %}
     </crowd-instructions>
 
-  
-    <h3>Before:</h3>
-    <p>
-      <img src="${before}" alt="Crumbled cubes" />
-    </p>
-
-    <h3>After:</h3>
+    <h3>Image:</h3>
     <p>
       <img src="${after}" alt="Stacked cubes" />
     </p>
 
     <h3>Response:</h3>
-    <p>Write how you would explain step-by-step a 5 years old child to stack cubes from the left image to obtain the tower in the right image.</p>
 
-    <crowd-text-area auto-focus name="stepByStep" placeholder="Type what you would say here..." required></crowd-text-area>
+    <p>Describe the image, such as a child can rebuild the exact same tower following your description.</p>
+    
+    <crowd-text-area auto-focus name="description" placeholder="Type what you would say here..." required></crowd-text-area>
 
   </crowd-form>
 </body>
 </html>
+{% endblock %}

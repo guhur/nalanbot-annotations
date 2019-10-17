@@ -1,12 +1,17 @@
 import logging
 import xmltodict
-from connect import connect_mturk
+import yaml
+from aws import connect_mturk
+from config import get_config
 
 
-def retrieve_hit(hit_id: str):
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+
+def retrieve_job(job_id: str) -> None:
     mturk = connect_mturk()
-    results = mturk.list_assignments_for_hit(HITId=hit_id,
-                                             AssignmentStatuses=['Submitted'])
+    results = mturk.list_assignments_for_hit(HITId=job_id)
 
     if results['NumResults'] > 0:
         for assignment in results['Assignments']:
@@ -24,3 +29,19 @@ def retrieve_hit(hit_id: str):
                 logging.info("Submitted answer: " + xml_doc['QuestionFormAnswers']['Answer']['FreeText'])
     else:
         logging.info("No results ready yet")
+
+
+if __name__ == "__main__":
+
+    config = get_config()
+    job = []
+
+    try:
+        with open(config['job_filename'], 'r') as ymlfile:
+            jobs = yaml.safe_load(ymlfile)
+    except yaml.YAMLError as err:
+        logging.error(err)
+
+    for job in jobs:
+        logging.info(f"Retrieving job {job['name']}")
+        retrieve_job(job['id'])

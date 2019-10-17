@@ -1,3 +1,4 @@
+hit_filename: hit.yaml
 aws:
   access_key_id: ''
   secret_access_key: ''
