@@ -1,0 +1,10 @@
+  <crowd-radio-group>
+    {% if colors is none %}
+    {%  set colors = [select, orange, yellow, indigo, red, blue, violet, white, green] %}
+    {% endif %}
+
+    {% for color in colors %}
+    <crowd-radio-button name="{{ step }}-0-{{ loop.index0 }}" value='{{ color }}'>
+      {{ color | title }}
+    </crowd-radio-button>
+  </crowd-radio-group>

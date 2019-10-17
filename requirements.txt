@@ -1,0 +1,4 @@
+PyYaml
+boto3
+xmltodict
+Jinja2

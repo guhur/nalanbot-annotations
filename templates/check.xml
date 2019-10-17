@@ -1,0 +1,39 @@
+{% extends mturk.html %}
+<html>
+  <head>
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
+    <script type='text/javascript' src='https://s3.amazonaws.com/mturk-public/externalHIT_v1.js'></script>
+    <script src="https://assets.crowd.aws/crowd-html-elements.js"></script>
+  </head>
+<body>
+  <crowd-form answer-format="flatten-objects">
+
+    <crowd-instructions link-text="View instructions" link-type="button">
+        {% block instructions %}
+              {% include 'check-instructions.html' %}
+        {% endblock %}
+    </crowd-instructions>
+
+    <h3>Image:</h3>
+    <p>
+      <img src="${before}" alt="Crumbled cubes" />
+    </p>
+
+
+    <h3>Description:</h3>
+    <p>${description}</p>
+
+    <h3>Response:</h3>
+    <p>Imagine the tower built by following the previous text. What is the color of each cubes (starting from bottom to top)?
+      Leave unchanged other fields.
+    </p>
+    
+  {% for i in range(11) %}
+    {% with step=i %}
+      {% include "radio-colors.html" %}
+    {% endwith %}
+  {% endfor %}
+
+  </crowd-form>
+</body>
+</html>

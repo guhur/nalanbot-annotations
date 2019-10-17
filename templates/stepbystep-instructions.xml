@@ -1,0 +1,84 @@
+<short-summary>
+    <p>Explain step by step how the tower was built.</p>
+</short-summary>
+
+<detailed-instructions>
+    <h3>Explain step by step how the tower was built.</h3>
+    <p>
+      <ul>
+        <li>      Given a image containing cubes on the ground,
+                  and another image with the same cubes stacked upon each other, 
+                  explain how the tower was built step by step.
+        </li>
+        <li>      Use references to avoid repetitions, such as "it", "the other cubes", 
+                  or even spatial references such as "the leftest cube".
+        </li>
+        <li>      Only ONE cube can be moved at the same time.
+        </li>
+      </ul>
+    </p>
+</detailed-instructions>
+
+<positive-example>
+    <h3>Before</h3>
+    <img src="https://nalanbot-images.s3.amazonaws.com/tower03_00000_first.jpg"
+         alt="The cubes are crumbled" />
+
+    <h3>After</h3>
+    <img src="https://nalanbot-images.s3.amazonaws.com/tower03_00000_last.jpg"
+         alt="The cubes are stacked" />
+
+    <h3>Response</h3>
+    <p>Take the leftest cube and stack it on top of the yellow cube. Then take the last cube and release it on top of the other ones.</p>
+
+</positive-example>
+
+<positive-example>
+    <h3>Before</h3>
+    <img src="https://nalanbot-images.s3.amazonaws.com/tower04_00359_first.jpg"
+         alt="The cubes are crumbled" />
+
+    <h3>After</h3>
+    <img src="https://nalanbot-images.s3.amazonaws.com/tower04_00359_last.jpg"
+         alt="The cubes are stacked" />
+
+    <h3>Response</h3>
+    <p>You must take the violet cube and move it on top of the red cube.
+       Thereafter, you grasp the cube at the right side of the scene 
+       and you leave it on top of the two first cubes.
+       Finally, you take the indigo cube and you place it on top of the other cubes.
+    </p>
+</positive-example>
+
+<negative-example>
+    <h3>Before</h3>
+    <img src="https://nalanbot-images.s3.amazonaws.com/tower03_00001_first.jpg"
+         alt="The cubes are crumbled" />
+
+    <h3>After</h3>
+    <img src="https://nalanbot-images.s3.amazonaws.com/tower03_00001_last.jpg"
+         alt="The cubes are stacked" />
+
+    <h3>Response</h3>
+    <p>Move the red cube on top of the orange one. Then move both cubes on top of last cube.
+    </p>
+
+    <h3>Why is it wrong?</h3>
+    <p>Two cubes are moved at the same time.</p>
+</negative-example>
+
+<negative-example>
+    <h3>Before</h3>
+    <img src="https://nalanbot-images.s3.amazonaws.com/tower03_00002_first.jpg"
+         alt="The cubes are crumbled" />
+
+    <h3>After</h3>
+    <img src="https://nalanbot-images.s3.amazonaws.com/tower03_00002_last.jpg"
+         alt="The cubes are stacked" />
+
+    <h3>Response</h3>
+    <p>The tower is made with a white cube, a violet cube and a yellow cube.</p>
+
+    <h3>Why is it wrong?</h3>
+    <p>This a description of the second image and not step by step instructions.</p>
+</negative-example>
