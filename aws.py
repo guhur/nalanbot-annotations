@@ -130,18 +130,18 @@ def is_hit_completed(client: boto3.session.Session, hit_id: str) -> bool:
     return completed == total
 
 
-def _progress_hits(client: boto3.session.Session, hits: List) -> None:
+def progress_hits(client: boto3.session.Session, hits: List[str]) -> None:
 
     all_completed, all_total = 0, 0
 
     for hit in hits:
-        completed, total = get_hit_progress(client, hit['HITId'])
+        completed, total = get_hit_progress(client, hit)
         all_completed += completed
         all_total += total
-        logging.info(f"{hit['HITId']}: {completed}/{total}")
+        logging.info(f"{hit}: {completed}/{total}")
         pbar = tqdm(total=total)
         pbar.update(completed)
-        pbar.close(0)
+        pbar.close()
 
 def progress_recorded_hits(client: boto3.session.Session):
     """
@@ -149,7 +149,7 @@ def progress_recorded_hits(client: boto3.session.Session):
     """
     logging.info('Retrieve all HITs')
     hits = list_recorded_hits(client)
-    _progress_hits(client, hits)
+    progress_hits(client, [i['HITId'] for i in hits])
 
 def progress_all_hits(client: boto3.session.Session):
     """
@@ -157,4 +157,4 @@ def progress_all_hits(client: boto3.session.Session):
     """
     logging.info('Retrieve all HITs')
     hits = list_all_hits(client)
-    _progress_hits(client, hits)
+    progress_hits(client, [i['HITId'] for i in hits])
