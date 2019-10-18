@@ -1,11 +1,12 @@
-from typing import Any
+from typing import Any, Union, Callable
 from pathlib import Path
 import json
+import csv
 from aws import list_bucket_objects
 from config import get_config
 
 
-def step_by_step_generator(task, client) -> Any:
+def step_by_step_generator(client) -> Any:
     """ A sample generator for the step by step experiment """
 
     config = get_config()
@@ -24,7 +25,7 @@ def step_by_step_generator(task, client) -> Any:
         yield {'before': before, 'after': after, 'id': num_simu}
 
 
-def check_generator(task, client) -> Any:
+def check_generator(client) -> Any:
     """ A sample generator for the check experiment """
 
     config = get_config()
@@ -36,14 +37,14 @@ def check_generator(task, client) -> Any:
         annotations = json.load(fid)
 
     for annotation in annotations:
-        image = s3_url + "tower" + annotation['num_cubes'] + "_" + \
+        image = s3_url + "tower_" + annotation['num_cubes'] + "_" + \
                 annotation['id'] + "_first.jpg"
         yield {'instruction': annotation['instruction'],
                'id': annotation['id'],
                'image': image}
 
 
-def description_generator(task, client) -> Any:
+def description_generator(client) -> Any:
     """ A sample generator for the description experiment """
 
     config = get_config()
@@ -58,3 +59,25 @@ def description_generator(task, client) -> Any:
         num_simu = last_name.split("_")[-2]
         after = s3_url + last_name
         yield {'image': after, 'id': num_simu}
+
+
+def csv_generator(client, filename: Union[str, Path],
+                  delimiter=";") -> Any:
+
+    with open(filename, "r", newline="") as fid:
+        reader = csv.reader(fid, delimiter=delimiter)
+        header = next(reader)
+        for row in reader:
+            yield {key: value for key, value in zip(header, row)}
+
+
+def retrieve_generator(name: str) -> Callable:
+    if name == "stepbystep":
+        generator = step_by_step_generator
+    elif name == "description":
+        generator = description_generator
+    elif name == "check":
+        generator = check_generator
+    else:
+        raise ValueError(f"Unknown {name}")
+    return generator

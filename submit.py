@@ -4,7 +4,7 @@ from jinja2 import Environment, FileSystemLoader
 import yaml
 from aws import connect_mturk, list_bucket_objects
 from config import get_config
-from generators import step_by_step_generator, description_generator, check_generator
+from generators import retrieve_generator
 
 
 logger = logging.getLogger()
@@ -17,6 +17,28 @@ def generate_template(task: Dict[str, Any],
     return template.render(**sample)
 
 
+
+def is_job_in_records(task_name: str, sample: Dict[str, str]) -> bool:
+    """ Check if we can find the job in the records """ 
+    config = get_config()
+
+    try:
+        with open(config['job_filename'], 'r') as ymlfile:
+            jobs = yaml.safe_load(ymlfile)
+    except yaml.YAMLError as err:
+        logging.error(err)
+
+    for job in jobs:
+        if not 'task_name' in job or job['task_name'] != task_name:
+            continue
+        if any([k in job.keys() for k in sample.keys()]):
+            continue
+        if all([job[key] == sample[key] for key in sample.keys()]):
+            return True
+
+    return False
+
+
 def create_job(client: Any,
                task: Dict[str, Any],
                sample: Dict) -> Dict[str, str]:
@@ -27,9 +49,9 @@ def create_job(client: Any,
                                 Description=task['description'],
                                 Keywords=task['keywords'],
                                 Reward=str(task['reward']),
-                                MaxAssignments=task['max_assignements'],
+                                MaxAssignments=task['max_assignments'],
                                 LifetimeInSeconds=task['lifetime'],
-                                AssignmentDurationInSeconds=task['assignement_duration'],
+                                AssignmentDurationInSeconds=task['assignment_duration'],
                                 AutoApprovalDelayInSeconds=task['auto_approval_delay'],
                                 Question=question)
 
@@ -40,7 +62,32 @@ def create_job(client: Any,
     logging.info(f"Preview: {preview_url}")
     logging.info(f"HIT Id {hit_id}")
 
-    return {**new_hit['HIT'], **sample}
+    job = {**new_hit['HIT'], **sample, "task_name": task['name']}
+    del job['Question']
+
+    try:
+        with open(config['job_filename'], 'a') as ymlfile:
+            yaml.dump([job], ymlfile, default_flow_style=False)
+    except yaml.YAMLError as err:
+        logging.error(err)
+
+    return job
+
+
+def create_task(client: Any,
+                task: Dict[str, Any]):
+
+    config = get_config()
+
+    response = client.create_hit_type(Title=task['title'],
+                                      Description=task['description'],
+                                      Keywords=task['keywords'],
+                                      Reward=str(task['reward']),
+                                      AssignmentDurationInSeconds=task['assignment_duration'],
+                                      AutoApprovalDelayInSeconds=task['auto_approval_delay'])
+
+    return response
+
 
 
 if __name__ == "__main__":
@@ -53,24 +100,11 @@ if __name__ == "__main__":
 
     for task in tasks:
         logging.info(f"Submitting task {task['name']}")
-        if task['name'] == "stepbystep":
-            generator = step_by_step_generator
-        elif task['name'] == "description":
-            generator = description_generator
-        elif task['name'] == "check":
-            generator = check_generator
-        else:
-            raise ValueError(f"Unknown {task['name']}")
+        generator = retrieve_generator(task['name'])(client)
 
-        for sample in generator(client, task):
+        for sample in generator:
             job = create_job(client, task, sample)
             jobs.append(job)
 
     logging.info("All tasks were successfully submitted.")
     logging.info(f"Information is recorded in {config['job_filename']}.")
-
-    try:
-        with open(config['job_filename'], 'a') as ymlfile:
-            yaml.dump(jobs, ymlfile, default_flow_style=False)
-    except yaml.YAMLError as err:
-        logging.error(err)

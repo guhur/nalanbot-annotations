@@ -6,58 +6,87 @@
     <h3>Explain step by step how the tower was built.</h3>
     <p>
       <ul>
-        <li>      Given a image containing cubes on the ground,
+        <li>      Given an image containing cubes on the ground,
                   and another image with the same cubes stacked upon each other, 
                   explain how the tower was built step by step.
         </li>
-        <li>      Use references to avoid repetitions, such as "it", "the other cubes", 
-                  or even spatial references such as "the leftest cube".
+        <li>      Use references to avoid repetitions, such as "it", "the other cube", 
+                  or even spatial references such as "the leftmost cube".
         </li>
-        <li>      Only ONE cube can be moved at the same time.
+        <li>      <b>IMPORTANT:</b> Only ONE cube can be moved at the same time.
         </li>
       </ul>
     </p>
 </detailed-instructions>
 
 <positive-example>
+  <div style="display: flex;">
+    <div style='width: 200px;'>
     <h3>Before</h3>
     <img src="https://nalanbot-images.s3.amazonaws.com/tower03_00000_first.jpg"
          alt="The cubes are crumbled" />
+    </div>
 
+    <div style='flex-grow: 1;'>
     <h3>After</h3>
     <img src="https://nalanbot-images.s3.amazonaws.com/tower03_00000_last.jpg"
          alt="The cubes are stacked" />
+    </div>
+  </div>
 
-    <h3>Response</h3>
-    <p>Take the leftest cube and stack it on top of the yellow cube. Then take the last cube and release it on top of the other ones.</p>
+    <h3>Possible response</h3>
+    <p>Place the orange block on the yellow one. Then, place the blue one on top of the other two.</p>
+
+    <h3>Possible response</h3>
+    <p>First keep the orange block on top of the yellow cube. Keep the blue cube on top of the orange cube.</p>
+
+    <h3>Possible response</h3>
+    <p>Take the leftmost cube and stack it on top of the yellow cube. Then take the last cube and release it on top of the other ones.</p>
 
 </positive-example>
 
 <positive-example>
+  <div style="display: flex;">
+    <div style='width: 200px;'>
     <h3>Before</h3>
     <img src="https://nalanbot-images.s3.amazonaws.com/tower04_00359_first.jpg"
          alt="The cubes are crumbled" />
+    </div>
 
+    <div style='flex-grow: 1;'>
     <h3>After</h3>
     <img src="https://nalanbot-images.s3.amazonaws.com/tower04_00359_last.jpg"
          alt="The cubes are stacked" />
+    </div>
+  </div>
 
-    <h3>Response</h3>
+    <h3>Possible responses</h3>
     <p>You must take the violet cube and move it on top of the red cube.
        Thereafter, you grasp the cube at the right side of the scene 
        and you leave it on top of the two first cubes.
        Finally, you take the indigo cube and you place it on top of the other cubes.
     </p>
+
+    <h3>Possible responses</h3>
+    <p>The violet cube must be moved on top of the red cube. Then, the green cube is displaced on top
+       of them, before displacing the last block at the top of the tower.
+    </p>
 </positive-example>
 
 <negative-example>
+  <div style="display: flex;">
+    <div style='width: 200px;'>
     <h3>Before</h3>
     <img src="https://nalanbot-images.s3.amazonaws.com/tower03_00001_first.jpg"
          alt="The cubes are crumbled" />
+    </div>
 
+    <div style='flex-grow: 1;'>
     <h3>After</h3>
     <img src="https://nalanbot-images.s3.amazonaws.com/tower03_00001_last.jpg"
          alt="The cubes are stacked" />
+    </div>
+  </div>
 
     <h3>Response</h3>
     <p>Move the red cube on top of the orange one. Then move both cubes on top of last cube.
@@ -68,13 +97,19 @@
 </negative-example>
 
 <negative-example>
+  <div style="display: flex;">
+    <div style='width: 200px;'>
     <h3>Before</h3>
     <img src="https://nalanbot-images.s3.amazonaws.com/tower03_00002_first.jpg"
          alt="The cubes are crumbled" />
+    </div>
 
+    <div style='flex-grow: 1;'>
     <h3>After</h3>
     <img src="https://nalanbot-images.s3.amazonaws.com/tower03_00002_last.jpg"
          alt="The cubes are stacked" />
+    </div>
+  </div>
 
     <h3>Response</h3>
     <p>The tower is made with a white cube, a violet cube and a yellow cube.</p>

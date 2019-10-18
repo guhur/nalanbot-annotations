@@ -16,19 +16,20 @@
         {% endblock %}
     </crowd-instructions>
 
-  
-    <h3>Before:</h3>
-    <p>
+  <div style="display: flex;">
+    <div style='width: 400px;'>
+    <h3>Before</h3>
       <img src="{{ before }}" alt="Crumbled cubes" />
-    </p>
+    </div>
 
-    <h3>After:</h3>
-    <p>
+    <div style='flex-grow: 1;'>
+    <h3>After</h3>
       <img src="{{ after }}" alt="Stacked cubes" />
-    </p>
+    </div>
+  </div>
 
-    <h3>Response:</h3>
-    <p>Write how you would explain step-by-step a 5 years old child to stack cubes from the left image to obtain the tower in the right image.</p>
+    <h3>Response</h3>
+    <p>Write how you would explain a 5 years old child how to stack cubes step-by-step, while using cubes lying on the left image to obtain the tower in the right image.</p>
 
     <crowd-text-area auto-focus name="stepByStep" placeholder="Type what you would say here..." required></crowd-text-area>
 
