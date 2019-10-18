@@ -16,6 +16,7 @@ def step_by_step_generator(task, client) -> Any:
         raise ValueError(f"{dataset_folder} is not a folder")
 
     for first_name in dataset_folder.glob("*_first.jpg"):
+        first_name = str(first_name.name)
         last_name = first_name[:-len("_first.jpg")] + "_last.jpg"
         num_simu = first_name.split("_")[-2]
         before = s3_url + first_name
@@ -53,8 +54,7 @@ def description_generator(task, client) -> Any:
         raise ValueError(f"{dataset_folder} is not a folder")
 
     for last_name in dataset_folder.glob("*_last.jpg"):
+        last_name = str(last_name.name)
         num_simu = last_name.split("_")[-2]
         after = s3_url + last_name
         yield {'image': after, 'id': num_simu}
-
-

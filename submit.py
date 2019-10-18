@@ -10,16 +10,17 @@ from generators import step_by_step_generator, description_generator, check_gene
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-def generate_template(task: Dict[str, Any]) -> str:
+def generate_template(task: Dict[str, Any],
+                      sample: Dict[str, str]) -> str:
     env = Environment(loader=FileSystemLoader('templates'))
     template = env.get_template(task['template'])
-    return template.render()
+    return template.render(**sample)
 
 
 def create_job(client: Any,
                task: Dict[str, Any],
                sample: Dict) -> Dict[str, str]:
-    question = generate_template(task)
+    question = generate_template(task, sample)
     config = get_config()
 
     new_hit = client.create_hit(Title=task['title'],
@@ -39,7 +40,7 @@ def create_job(client: Any,
     logging.info(f"Preview: {preview_url}")
     logging.info(f"HIT Id {hit_id}")
 
-    return {'preview': preview_url, 'id': hit_id, 'name': task['name']}
+    return {**new_hit['HIT'], **sample}
 
 
 if __name__ == "__main__":
@@ -52,12 +53,14 @@ if __name__ == "__main__":
 
     for task in tasks:
         logging.info(f"Submitting task {task['name']}")
-        if task['name'] == "stepByStep":
+        if task['name'] == "stepbystep":
             generator = step_by_step_generator
         elif task['name'] == "description":
             generator = description_generator
         elif task['name'] == "check":
             generator = check_generator
+        else:
+            raise ValueError(f"Unknown {task['name']}")
 
         for sample in generator(client, task):
             job = create_job(client, task, sample)
@@ -67,7 +70,7 @@ if __name__ == "__main__":
     logging.info(f"Information is recorded in {config['job_filename']}.")
 
     try:
-        with open(config['job_filename'], 'w') as ymlfile:
+        with open(config['job_filename'], 'a') as ymlfile:
             yaml.dump(jobs, ymlfile, default_flow_style=False)
     except yaml.YAMLError as err:
         logging.error(err)
