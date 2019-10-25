@@ -15,11 +15,11 @@ def cli():
     pass
 
 @cli.command("delete", help='Delete one or several HITs')
-@click.option('--all_hits',
+@click.option('--all-hits',
               default=False,
               is_flag=True,
               help="Delete all HITs related to account")
-@click.option('--hit_id',
+@click.option('--hit-id',
               default=None,
               help="Specific HITId",
               multiple=True)
@@ -70,7 +70,7 @@ def progress(all_hits: bool = False,
               default=False,
               is_flag=True,
               help="Allow that the same HIT is send several times")
-@click.option('--task-name',
+@click.option('--name',
               default=None,
               help="Specific HITId",
               multiple=True)
@@ -82,11 +82,11 @@ def progress(all_hits: bool = False,
               default=None,
               help="From CSV records")
 def submit(allow_duplicate: bool = False,
-           task_name: Optional[List[str]] = None,
+           name: Optional[List[str]] = None,
            all_tasks: bool = False,
            from_csv: Optional[str] = None):
 
-    if task_name == tuple() and not all_tasks:
+    if name == tuple() and not all_tasks:
         raise ValueError("No task to submit")
 
     client = aws.connect_mturk()
@@ -94,8 +94,8 @@ def submit(allow_duplicate: bool = False,
     config = get_config()
     tasks = config['tasks']
 
-    if task_name != tuple():
-        tasks = [task for task in tasks if task['name'] in task_name]
+    if name != tuple():
+        tasks = [task for task in tasks if task['name'] in name]
 
     for task in tasks:
         logging.info(f"Submitting task {task['name']}")

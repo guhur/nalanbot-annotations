@@ -1,5 +1,6 @@
 import logging
 from typing import Dict, Any
+from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 import yaml
 from aws import connect_mturk, list_bucket_objects
@@ -22,13 +23,15 @@ def is_job_in_records(task_name: str, sample: Dict[str, str]) -> bool:
     """ Check if we can find the job in the records """ 
     config = get_config()
 
-    try:
-        with open(config['job_filename'], 'r') as ymlfile:
-            jobs = yaml.safe_load(ymlfile)
-    except yaml.YAMLError as err:
-        logging.error(err)
+    if not Path(config['job_filename']).is_file():
+        return False
+
+    with open(config['job_filename'], 'r') as ymlfile:
+        jobs = yaml.safe_load(ymlfile)
 
     for job in jobs:
+        if job is None:
+            continue
         if not 'task_name' in job or job['task_name'] != task_name:
             continue
         if any([k in job.keys() for k in sample.keys()]):

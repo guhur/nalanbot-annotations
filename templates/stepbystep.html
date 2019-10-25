@@ -24,22 +24,44 @@
 
     <h3>Task</h3>
     <p><b>Please read the instructions before starting the task!</b>
+    </p>
     <crowd-instructions link-text="View instructions" link-type="button">
         {% block instructions %}
               {% include 'stepbystep-instructions.html' %}
         {% endblock %}
     </crowd-instructions>
 
-    </p>
     <p>Explain to a 5 year old to stack cubes in a step-by-step manner (from left image to the right image).
       Please provide three different instructions to build the tower.
     </p>
 
-    <h3>Response</h3>
-    <crowd-text-area auto-focus name="stepByStep1" placeholder="Instruction 1..." required></crowd-text-area>
-    <crowd-text-area auto-focus name="stepByStep2" placeholder="Instruction 2..." required></crowd-text-area>
-    <crowd-text-area auto-focus name="stepByStep3" placeholder="Instruction 3..." required></crowd-text-area>
+    <h3>Responses</h3>
 
+    <crowd-input auto-focus name="stepByStep1" placeholder="Instruction 1..." required></crowd-input>
+    <crowd-input auto-focus name="stepByStep2" placeholder="Instruction 2..." required></crowd-input>
+    <crowd-input auto-focus name="stepByStep3" placeholder="Instruction 3..." required></crowd-input>
+
+    <script type="text/javascript">
+      function validateForm() {
+        values = []
+        valide = true;
+        document.querySelectorAll("crowd-input").forEach((t) => {
+            value = t.value.trim();
+            if (value.length < 20 || values.includes(value)) {
+              valide = false;
+            } 
+            values.push(value);
+          }
+        )
+        return valide;
+      }
+    document.querySelector('crowd-form').onsubmit = function(e ) {
+      if (!validateForm()) {
+          alert("Please follow instructions");
+          e.preventDefault();
+      }
+    }
+    </script>
   </crowd-form>
 </body>
 </html>
