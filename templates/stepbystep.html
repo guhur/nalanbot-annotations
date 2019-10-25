@@ -10,12 +10,6 @@
 <body>
   <crowd-form answer-format="flatten-objects">
 
-    <crowd-instructions link-text="View instructions" link-type="button">
-        {% block instructions %}
-              {% include 'stepbystep-instructions.html' %}
-        {% endblock %}
-    </crowd-instructions>
-
   <div style="display: flex;">
     <div style='width: 400px;'>
     <h3>Before</h3>
@@ -28,10 +22,23 @@
     </div>
   </div>
 
-    <h3>Response</h3>
-    <p>Write how you would explain a 5 years old child how to stack cubes step-by-step, while using cubes lying on the left image to obtain the tower in the right image.</p>
+    <h3>Task</h3>
+    <p><b>Please read the instructions before starting the task!</b>
+    <crowd-instructions link-text="View instructions" link-type="button">
+        {% block instructions %}
+              {% include 'stepbystep-instructions.html' %}
+        {% endblock %}
+    </crowd-instructions>
 
-    <crowd-text-area auto-focus name="stepByStep" placeholder="Type what you would say here..." required></crowd-text-area>
+    </p>
+    <p>Explain to a 5 year old to stack cubes in a step-by-step manner (from left image to the right image).
+      Please provide three different instructions to build the tower.
+    </p>
+
+    <h3>Response</h3>
+    <crowd-text-area auto-focus name="stepByStep1" placeholder="Instruction 1..." required></crowd-text-area>
+    <crowd-text-area auto-focus name="stepByStep2" placeholder="Instruction 2..." required></crowd-text-area>
+    <crowd-text-area auto-focus name="stepByStep3" placeholder="Instruction 3..." required></crowd-text-area>
 
   </crowd-form>
 </body>

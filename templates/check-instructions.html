@@ -1,16 +1,16 @@
 <short-summary>
-    <p>Find the order of the tower.</p>
+  <p>Read an instruction of building towers of blocks and indicate the colors of the tower from bottom to top.</p>
 </short-summary>
 
 <detailed-instructions>
-    <h3>Find the order of the tower.</h3>
+    <h3>Read an instruction of building towers of blocks and indicate the colors of the tower from bottom to top.</h3>
     <p>
       <ul>
-        <li>      Given a image containing cubes on the ground,
-                  and a description of a tower, built from those cubes, written by another Turker, 
-                  find the color of each cube from the bottom to the top of the tower.
+        <li>      Given an image with cubes on the ground,
+                  and a description of how to build a tower from these cubes,
+                  <em>list the color of the cubes of the final tower from <b>bottom to top</b></em>.
         </li>
-        <li>      NOT all fields must be changed. Once you think you have listed all cubes, leave other fields unchanged.
+        <li>      NOT all levels need to be used. Once you think you have listed all cubes, leave other fields unchanged.
         </li>
       </ul>
     </p>
@@ -18,20 +18,20 @@
 
 <positive-example>
     <h3>Image</h3>
-    <img src="https://nalanbot-images.s3.amazonaws.com/tower03_00000_first.jpg"
+    <img src="https://nalanbot-images2.s3.amazonaws.com/tower_03_00000_first.jpg" width="200px"
          alt="The cubes are crumbled" />
 
     <h3>Description</h3>
-    <p>Take the leftmost cube and stack it on top of the yellow cube. Then take the last cube and release it on top of the other ones.</p>
+    <p>Take the leftmost cube and stack it on top of the white cube. Then take the last cube and release it on top of the other ones.</p>
 
-    <h3>Response</h3>
-    <p> Yellow, Orange, Blue.
+    <h3>Correct Response</h3>
+    <p> White, Orange, Green.
     </p>
 </positive-example>
 
 <positive-example>
     <h3>Image</h3>
-    <img src="https://nalanbot-images.s3.amazonaws.com/tower04_00359_first.jpg"
+    <img src="https://nalanbot-images2.s3.amazonaws.com/tower_04_00359_first.jpg" width="200px"
          alt="The cubes are crumbled" />
 
     <h3>Description</h3>
@@ -41,22 +41,24 @@
        Finally, you take the indigo cube and you place it on top of the other cubes.
     </p>
 
-    <h3>Response</h3>
+    <h3>Correct Response</h3>
     <p>  Red, Violet, Green, Indigo.
     </p>
 </positive-example>
 
 <negative-example>
     <h3>Image</h3>
-    <img src="https://nalanbot-images.s3.amazonaws.com/tower03_00002_first.jpg"
+    <img src="https://nalanbot-images2.s3.amazonaws.com/tower_03_00002_first.jpg" width="200px"
          alt="The cubes are crumbled" />
 
     <h3>Description</h3>
-    <p>The colors of the cubes are, starting from its top, a white cube, a violet cube and finally a yellow cube.</p>
+    <p>Move the blue cube on top of the white one, and then move the silver one on top of the blue.</p>
+    <!--<p>The colors of the cubes are, starting from its top, a white cube, a violet cube and finally a yellow cube.</p>-->
 
-    <h3>Response</h3>
-    <p> White, Violet, Yellow.</p>
+    <h3>Wrong Response</h3>
+    <p> Silver, Blue, White.</p>
 
     <h3>Why is it wrong?</h3>
-    <p> The colors are correct, but the order is from the top to the bottom, while it should be from the bottom to the top.</p>
+    <p> The colors are correct, but the order is wrong: It should be bottom to top: White, Blue, Silver.</p>
 </negative-example>
+

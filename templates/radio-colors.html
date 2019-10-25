@@ -1,6 +1,6 @@
-Level {{ step }}  
+Level {{ step+1 }}  
 <crowd-radio-group>
-    {%  set colors = ['orange', 'yellow', 'indigo', 'red', 'blue', 'violet', 'white', 'green'] %}
+    {% set colors = ["red", "orange", "yellow", "green", "blue", "grey", "black", "white", "pink"] %}
     {% for color in colors %}
     <crowd-radio-button name="{{ step }}-0-{{ loop.index0 }}" value='{{ color }}'>
       {{ color | title }}
