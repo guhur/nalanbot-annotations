@@ -25,7 +25,31 @@
 
     <p>Describe the image, such as a child can rebuild the exact same tower following your description.</p>
     
-    <crowd-text-area auto-focus name="description" placeholder="Type what you would say here..." required></crowd-text-area>
+    <crowd-text-area auto-focus name="description1" placeholder="Description 1..." required></crowd-text-area>
+    <crowd-text-area name="description2" placeholder="Description 2..." required></crowd-text-area>
+    <crowd-text-area name="description3" placeholder="Description 3..." required></crowd-text-area>
+
+    <script type="text/javascript">
+      function validateForm() {
+        values = []
+        valide = true;
+        document.querySelectorAll("crowd-text-area").forEach((t) => {
+            value = t.value.trim();
+            if (value.length < 20 || values.includes(value)) {
+              valide = false;
+            } 
+            values.push(value);
+          }
+        )
+        return valide;
+      }
+    document.querySelector('crowd-form').onsubmit = function(e ) {
+      if (!validateForm()) {
+          alert("Please follow instructions");
+          e.preventDefault();
+      }
+    }
+    </script>
 
   </crowd-form>
 </body>
