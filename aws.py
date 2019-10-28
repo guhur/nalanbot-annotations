@@ -158,3 +158,15 @@ def progress_all_hits(client: boto3.session.Session):
     logging.info('Retrieve all HITs')
     hits = list_all_hits(client)
     progress_hits(client, [i['HITId'] for i in hits])
+
+
+def send_bonus(client: boto3.session.Session,
+               assignement: str,
+               worker: str,
+               amount: str,
+               message: str):
+
+    client.send_bonus(WorkerId=str(worker),
+                      BonusAmount=str(amount),
+                      AssignmentId=str(assignement),
+                      Reason=message)

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from typing import Union, List, Optional, Callable
 import logging
+import csv
 import click
 import aws
 from config import get_config
@@ -63,6 +64,62 @@ def progress(all_hits: bool = False,
         aws.progress_hits(client, hit_id)
     else:
         raise ValueError("No job to delete")
+
+
+@cli.command("bonus", help='Send bonus')
+@click.option('--from-csv',
+              default=None,
+              help="Send bonus to all hits in the CSV result file")
+@click.option('--amount',
+              default=0.01,
+              help="Amount to send")
+@click.option('--message',
+              default='Your answer is really helpful for our research! Hoping to get more answers from you!')
+@click.option('--output',
+              default='',
+              help='Output CSV file to register the bonus')
+def bonus(from_csv: Optional[str] = None,
+          amount: float = 0.,
+          message: str = "",
+          output: str = ""):
+
+    client = aws.connect_mturk()
+    assignments = []
+    workers = []
+    done = []
+
+    import pdb; pdb.set_trace()
+    if output != "":
+        with open(output, 'r', newline='') as fid:
+            reader = csv.reader(fid, delimiter=',')
+            for row in reader:
+                done.append(row[0])
+
+    if from_csv is not None:
+        with open(from_csv, 'r', newline='') as fid:
+            header = next(fid).split(',')
+            reader = csv.reader(fid, delimiter=',')
+            for row in reader:
+                row_dict = {k: v for k, v in zip(header, row)}
+                assignment_id = row_dict['assignment_id']
+
+                if assignment_id in done:
+                    continue
+
+                if assignment_id not in assignments:
+                    assignments.append(assignment_id)
+                    workers.append(row_dict['worker_id'])
+    else:
+        raise ValueError("No job to reward")
+
+    for assignment, worker in zip(assignments, workers):
+        aws.send_bonus(client, assignment, worker, amount, message)
+
+    if output != "":
+        with open(output, 'a', newline='') as fid:
+            writer = csv.writer(fid, delimiter=',')
+            for assignment, worker in zip(assignments, workers):
+                writer.writerow(assignment, worker, amount, message)
 
 
 @cli.command("submit", help='Submit one or several HITs')

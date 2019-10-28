@@ -6,7 +6,7 @@ from aws import list_bucket_objects
 from config import get_config
 
 
-def step_by_step_generator(client) -> Any:
+def step_by_step_generator(client=None) -> Any:
     """ A sample generator for the step by step experiment """
 
     config = get_config()
