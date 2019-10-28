@@ -7,6 +7,7 @@ import aws
 from config import get_config
 from submit import is_job_in_records, create_job
 from generators import retrieve_generator, csv_generator
+from dataset import extract_ground_truth, generate_check_file
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -66,6 +67,36 @@ def progress(all_hits: bool = False,
         raise ValueError("No job to delete")
 
 
+@cli.command("ground-truth", help="Retrieve ground truth")
+@click.argument('csv-file',
+                type=str)
+@click.argument('dataset',
+                type=str)
+def ground_truth(csv_file: str, dataset: str):
+    rows = []
+    with open(csv_file, 'r', newline='') as fid:
+        header = next(fid).split(',')
+        reader = csv.reader(fid, delimiter=',')
+        for row in reader:
+            ground_truth = extract_ground_truth(dataset, row[0], row[1])
+            row.append(ground_truth)
+            rows.append(row)
+
+    with open(csv_file, 'w', newline='') as fid:
+        writer = csv.writer(fid, delimiter=',')
+        for row in rows:
+            writer.writerow(row)
+
+
+@cli.command("check-generator", help="Generate data for the check step")
+@click.argument('csv-file',
+                type=str)
+@click.argument('output',
+                type=str)
+def check_generator(csv_file: str, output: str):
+    generate_check_file(csv_file, output)
+
+
 @cli.command("bonus", help='Send bonus')
 @click.option('--from-csv',
               default=None,
@@ -88,7 +119,6 @@ def bonus(from_csv: Optional[str] = None,
     workers = []
     done = []
 
-    import pdb; pdb.set_trace()
     if output != "":
         with open(output, 'r', newline='') as fid:
             reader = csv.reader(fid, delimiter=',')
