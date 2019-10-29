@@ -42,6 +42,11 @@ def generate_check_file(csv_file: Union[Path, str],
                 annotations.append(annotate)
 
     with open(output_file, "w") as fid:
+        buffer = []
         for annotate in annotations:
-            fid.write(json.dumps(annotate))
-            fid.write('\n')
+            buffer.append(annotate)
+
+            if len(buffer) == 3:
+                fid.write(json.dumps(buffer))
+                fid.write('\n')
+                buffer.clear()
