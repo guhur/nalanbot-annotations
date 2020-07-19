@@ -119,8 +119,9 @@
     </p>
     
 <br/><br/><br/>
-<form id='results-form' method='post' action='dummy' class='text-center'>
-    <input type='hidden' value='' name='assignmentId' id='assignmentId'/>
+
+
+
     <input type='hidden' value='' name='output' id='output'/>
         
         
@@ -149,9 +150,9 @@
   
   <div class="content">
     <h3 class="ui sub header">3. Describe the color name for each block in the tower, starting from bottom.</h3>
-
+    <p>The bottom is at level 1.</p>
     <button type="button" class="ui labeled icon button teal" id="add-cube" onClick="addRadio();">
-        <i class="plus square icon"></i>Add a cube</button>
+        <i class="plus square icon"></i>Add a cube on top of the others</button>
       <!--<button class="ui labeled icon button teal basic" onClick="removeRadio();">
           <i class="trash icon"></i> Remove last cube</button>
          -->
@@ -170,13 +171,18 @@
           <button type="button" class="ui right labeled icon button teal" id='next-btn' onClick="next();">
               <i class="right arrow icon"></i> Next
           </button>
+          <button type="button" class="ui right labeled icon button teal" style="display: none;" onClick="submit();" id='submit-btn'>
+              <i class="right arrow icon"></i> Submit
+          </button>
     </div>
   </div>
 </div>
+
+
+
   
  <!-- End row -->
 </div></div>
-</form>
     
     <script>
     var sentence0 = "Put A on B. Move C on A"; 
@@ -185,6 +191,9 @@
     var url0 = "https://nalanbot-images2.s3.amazonaws.com/tower_03_00000_first.jpg";
     var url1 = "https://nalanbot-images2.s3.amazonaws.com/tower_03_00001_first.jpg";
     var url2 = "https://nalanbot-images2.s3.amazonaws.com/tower_03_00002_first.jpg";
+    var id0 = "test0"
+    var id1 = "test1"
+    var id2 = "test2"
 
     var sentences = [`${sentence0}`, `${sentence1}`, `${sentence2}`];
     var urls = [`${url0}`, `${url1}`, `${url2}`];
@@ -198,6 +207,7 @@
     function next() {
         if (checkResult()) {
             recordResult();
+            // at most we will reach stepId == 2
             stepId = Math.min(2, stepId + 1);
             resetAnswer();
         }
@@ -206,6 +216,7 @@
     function prev() {
         if (checkResult()) {
             recordResult();
+            // at least we will reach stepId == 0
             stepId = Math.max(0, stepId - 1);
             resetAnswer();
         }
@@ -273,11 +284,13 @@
     }
 
     function prepareSubmit() {
-        $('#next-btn').click(recordResult);
-        $('#next-btn').removeAttr("type").attr("type", "submit");
-        var submit_to = getUrlParam('turkSubmitTo');
-        $('#results-form').attr('action', submit_to + '/mturk/externalSubmit');                      
-        $('#assignmentId').val(getUrlParam('assignmentId'));
+        $('#next-btn').css("display", "none");
+        $('#submit-btn').css("display", "block");
+    }
+    
+    function submit() {
+        recordResult()
+        $('#submit-btn').removeAttr("type").attr("type", "submit");
     }
     
     function resetAnswer() {
@@ -285,7 +298,6 @@
         $('#broken').prop("disabled", false)
         broken = false
 
-        $('#next-btn').removeAttr("type").attr("type", "button");
         if (stepId == 2) {
             prepareSubmit();
         }
@@ -304,3 +316,4 @@
     </script>
 </body>
 </html>
+
