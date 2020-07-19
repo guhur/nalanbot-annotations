@@ -1,0 +1,306 @@
+<html>
+  <head>
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
+    <script type='text/javascript' src='https://s3.amazonaws.com/mturk-public/externalHIT_v1.js'></script>
+    <script src="https://assets.crowd.aws/crowd-html-elements.js"></script>
+    
+    <script src='//cdnjs.cloudflare.com/ajax/libs/json3/3.3.2/json3.min.js'></script>    
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.6/dist/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/semantic-ui-forest/forest-themes/master/dist/semantic-ui/v2/semantic.amazon.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.6/dist/semantic.min.js"></script>
+    
+  </head>
+<body>
+    <style>
+      progress {
+        width: 40%;
+        display: block; /* default: inline-block */
+        margin: 2em auto;
+        padding: 3px;
+        border: 0 none;
+        background: #444;
+        border-radius: 14px;
+      }
+      progress::-moz-progress-bar {
+        border-radius: 12px;
+        background: #3498DB;
+      }
+      /* webkit */
+      @media screen and (-webkit-min-device-pixel-ratio:0) {
+        progress {
+          height: 25px;
+        }
+      }
+      progress::-webkit-progress-bar {
+          background: transparent;
+      }  
+      progress::-webkit-progress-value {  
+        border-radius: 12px;
+        background: #3498DB;
+      } 
+      </style>
+
+    <h3>
+        Instructions
+    </h3>
+    <p>
+        Read an instruction of building towers of blocks and indicate the colors of the tower from bottom to top. Leave blanks any missing level.
+    </p>
+
+    <crowd-instructions link-text="View instructions" link-type="button">
+        <short-summary>
+            <p>Read an instruction of building towers of blocks and indicate the colors of the tower from bottom to top.</p>
+        </short-summary>
+
+        <detailed-instructions>
+            <h3>Read an instruction of building towers of blocks and indicate the colors of the tower from bottom to top.</h3>
+            <p>
+              <ul>
+                <li>      Given an image with cubes on the ground,
+                          and a description of how to build a tower from these cubes,
+                          <em>list the color of the cubes of the final tower from <b>bottom to top</b></em>.
+                </li>
+                <li>      NOT all levels need to be used. Once you think you have listed all cubes, leave other fields unchanged.
+                </li>
+              </ul>
+            </p>
+        </detailed-instructions>
+
+        <positive-example>
+            <h3>Image</h3>
+            <img src="https://nalanbot-images2.s3.amazonaws.com/tower_03_00000_first.jpg" width="200px"
+                 alt="The cubes are crumbled" />
+        
+            <h3>Description</h3>
+            <p>Take the leftmost cube and stack it on top of the white cube. Then take the last cube and release it on top of the other ones.</p>
+        
+            <h3>Correct Response</h3>
+            <p> White, Orange, Green.
+            </p>
+        </positive-example>
+        
+        <positive-example>
+            <h3>Image</h3>
+            <img src="https://nalanbot-images2.s3.amazonaws.com/tower_04_00001_first.jpg" width="200px"
+                 alt="The cubes are crumbled" />
+        
+            <h3>Description</h3>
+            <p>You must take the violet cube and move it on top of the red cube.
+               Thereafter, you grasp the cube at the right side of the scene 
+               and you leave it on top of the two first cubes.
+               Finally, you take the indigo cube and you place it on top of the other cubes.
+            </p>
+        
+            <h3>Correct Response</h3>
+            <p>  Red, Violet, Green, Indigo.
+            </p>
+        </positive-example>
+        
+        <negative-example>
+            <h3>Image</h3>
+            <img src="https://nalanbot-images2.s3.amazonaws.com/tower_03_00002_first.jpg" width="200px"
+                 alt="The cubes are crumbled" />
+        
+            <h3>Description</h3>
+            <p>Move the blue cube on top of the white one, and then move the silver one on top of the blue.</p>
+            <!--<p>The colors of the cubes are, starting from its top, a white cube, a violet cube and finally a yellow cube.</p>-->
+        
+            <h3>Wrong Response</h3>
+            <p> Silver, Blue, White.</p>
+        
+            <h3>Why is it wrong?</h3>
+            <p> The colors are correct, but the order is wrong: It should be bottom to top: White, Blue, Silver.</p>
+        </negative-example>
+    </crowd-instructions>
+    
+    <p>
+        Your payment will be processed ONLY IF other workers provide the same answer than you.
+    </p>
+    
+<br/><br/><br/>
+<form id='results-form' method='post' action='dummy' class='text-center'>
+    <input type='hidden' value='' name='assignmentId' id='assignmentId'/>
+    <input type='hidden' value='' name='output' id='output'/>
+        
+        
+<div class="ui one column grid">
+<div class="column">
+<div class="ui fluid card">
+  <div class="content">
+     <h3 class="ui sub header">1. Look at this image</h3>
+  </div>
+
+  <div id="image-container">
+        <div class="ui active inverted dimmer"><div class="ui text loader">Loading</div></div>
+  </div>
+  
+  <div class="content">
+    <button type="button" class="right floated ui labeled icon button yellow toggle basic" id="broken" onClick="brokenInstructions();">
+        <i class="bug icon"></i>Report a bug
+    </button>
+    <h3 class="ui sub header">2. Follow the instructions</h3>
+    <div class="ui message" id='instruction-container'>
+        <div class="ui active inverted dimmer"><div class="ui text loader">Loading</div></div>
+    </div>
+    <br />
+    <br />
+  </div>
+  
+  <div class="content">
+    <h3 class="ui sub header">3. Describe the color name for each block in the tower, starting from bottom.</h3>
+
+    <button type="button" class="ui labeled icon button teal" id="add-cube" onClick="addRadio();">
+        <i class="plus square icon"></i>Add a cube</button>
+      <!--<button class="ui labeled icon button teal basic" onClick="removeRadio();">
+          <i class="trash icon"></i> Remove last cube</button>
+         -->
+
+    <div id="answer">
+    </div>
+    <br />
+  </div>
+  
+  
+  <div class="extra content">
+      <div class="ui two buttons">
+          <button type="button" class="ui labeled icon button red" id='prev-btn' onClick="prev();">
+              <i class="left arrow icon"></i> Back
+          </button>
+          <button type="button" class="ui right labeled icon button teal" id='next-btn' onClick="next();">
+              <i class="right arrow icon"></i> Next
+          </button>
+    </div>
+  </div>
+</div>
+  
+ <!-- End row -->
+</div></div>
+</form>
+    
+    <script>
+    var sentence0 = "Put A on B. Move C on A"; 
+    var sentence1 = "Demo 2"; 
+    var sentence2 = "Demo 3"; 
+    var url0 = "https://nalanbot-images2.s3.amazonaws.com/tower_03_00000_first.jpg";
+    var url1 = "https://nalanbot-images2.s3.amazonaws.com/tower_03_00001_first.jpg";
+    var url2 = "https://nalanbot-images2.s3.amazonaws.com/tower_03_00002_first.jpg";
+
+    var sentences = [`${sentence0}`, `${sentence1}`, `${sentence2}`];
+    var urls = [`${url0}`, `${url1}`, `${url2}`];
+    var ids = [`${id0}`, `${id1}`, `${id2}`];
+    var colors = ["red", "orange", "yellow", "green", "blue", "grey", "black", "white", "pink"];
+    var output = [];
+    var levelId = 0;
+    var stepId = 0;
+    var broken = false;
+    
+    function next() {
+        if (checkResult()) {
+            recordResult();
+            stepId = Math.min(2, stepId + 1);
+            resetAnswer();
+        }
+    }
+    
+    function prev() {
+        if (checkResult()) {
+            recordResult();
+            stepId = Math.max(0, stepId - 1);
+            resetAnswer();
+        }
+    }
+    
+    function brokenInstructions() {
+        broken = true
+        $('#add-cube').prop("disabled", true)
+        $('#broken').prop("disabled", true)
+        $('#answer').html('<div class="ui warning message"><div class="header">You reported a bug in the instruction.</div>Press the button next to continue.</div>')
+    }
+    
+    function checkResult() {
+        const validate = levelId >= 2 || broken;
+        if (!validate) {
+            $('body')
+            .toast({
+                class: 'error',
+                message: `The tower doesn't seem tall enough. Are you sure you followed the instructions correctly?`
+            })
+        }
+        return validate;
+    }
+    
+    function recordResult() {
+        if(broken) {
+            output[stepId] = "bug"
+        } else {
+            output[stepId] = [];
+            $('#answer').children('crowd-radio-group').each( (k, radioGroup) => {
+              let checked = -1;
+              const btns = radioGroup.children;
+              for (let i = 0; i < btns.length; i++) {
+                if (btns[i].checked) {
+                  checked = i;
+                  break;
+                }
+              }
+              output[stepId].push(checked);
+            });
+        }
+        $('#output').val(JSON.stringify(output));
+    }
+
+    function addRadio () {
+        var radio = "Level " + (levelId + 1) + "<crowd-radio-group id='radio-" + levelId +"'>";
+        colors.forEach( (color, idx) => {
+            var code = "btn-" + color + "-" + "idx";
+            radio += "\
+            <crowd-radio-button \
+                name='" + code + "' \
+                id='" + code + "' \
+                value='" + color + "'> \
+                " + color + " \
+            </crowd-radio-button>";
+        });
+        radio += "</crowd-radio-group><br />";
+        $("#answer").prepend(radio);
+        levelId += 1;
+    }
+    
+    function getUrlParam(name) {
+        var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+        return match ? decodeURIComponent(match[1].replace(/\+/g, ' ')) : null;
+    }
+
+    function prepareSubmit() {
+        $('#next-btn').click(recordResult);
+        $('#next-btn').removeAttr("type").attr("type", "submit");
+        var submit_to = getUrlParam('turkSubmitTo');
+        $('#results-form').attr('action', submit_to + '/mturk/externalSubmit');                      
+        $('#assignmentId').val(getUrlParam('assignmentId'));
+    }
+    
+    function resetAnswer() {
+        $('#add-cube').prop("disabled", false)
+        $('#broken').prop("disabled", false)
+        broken = false
+
+        $('#next-btn').removeAttr("type").attr("type", "button");
+        if (stepId == 2) {
+            prepareSubmit();
+        }
+
+        $("#prev-btn").prop("disabled", stepId == 0);
+
+        $("#instruction-container").html(sentences[stepId]);
+        $("#image-container").html("<img src='" + urls[stepId] + "' id='image-tower' class='ui medium image' alt='Image of the tower' />");
+
+        $("#answer").html("");
+        levelId = 0;
+        addRadio();
+    }
+
+    resetAnswer();
+    </script>
+</body>
+</html>

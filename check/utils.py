@@ -1,0 +1,1 @@
+BUILD_FOLDER = "build"

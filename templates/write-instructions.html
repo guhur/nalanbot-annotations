@@ -1,0 +1,462 @@
+<html>
+  <head>
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
+    <script type='text/javascript' src='https://s3.amazonaws.com/mturk-public/externalHIT_v1.js'></script>
+    <script src="https://assets.crowd.aws/crowd-html-elements.js"></script>
+    <!-- simpleamt depends on these libraries -->
+    <script src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
+    <script src='//cdnjs.cloudflare.com/ajax/libs/json3/3.3.2/json3.min.js'></script>    
+    <!-- end of required libraries -->
+    <script src='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'></script>
+    <script src='//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js'></script>
+  </head>
+<body>
+
+    <h3>Explain to a 5 year old to stack cubes in a step-by-step manner (from left image to the right image).
+    </h3>
+
+
+  <div style="display: flex;">
+    <div style='width: 400px;'>
+    <h3>Before</h3>
+      <div id='before-container'>
+      </div>
+    </div>
+
+    <div style='flex-grow: 1;'>
+    <h3>After</h3>
+      <div id='after-container'>
+      </div>
+    </div>
+  </div>
+
+    <h3>Response</h3>
+
+    <crowd-instructions link-text="View instructions" link-type="button">
+        <short-summary>
+            <p>Provide a step-by-step instruction of how to build the tower of blocks.</p>
+        </short-summary>
+        
+        <detailed-instructions>
+            <h3>Provide a step-by-step instruction of how to build the tower of blocks.</h3>
+            <p>
+              <ul>
+                <li>      Given an image containing cubes of different colors on the ground,
+                          and another image with the same cubes stacked upon each other, 
+                          <em>write step-by-step instructions explaining how to build the tower</em>.
+                </li>
+                <li>      You may use references to the cubes, such as "it", "the other cube", 
+                          or even spatial references such as "the leftmost cube".
+                </li>
+                <li>      <b>IMPORTANT:</b> Only ONE cube can be moved at any time.
+                </li>
+                <li>      We will manually check all instructions. They should be clear enough
+                          for another person to read and build the tower.
+                </li>
+                <li>      Note that this task is not suitable for color-blind/visually-impaired people.
+                </li>
+              </ul>
+            </p>
+        </detailed-instructions>
+        
+        <positive-example>
+          <div style="display: flex;">
+            <div style='width: 200px;'>
+            <h3>Before</h3>
+            <img src="https://nalanbot-images2.s3.amazonaws.com/tower_03_00000_first.jpg" width="200px"
+                 alt="The cubes are crumbled" />
+            </div>
+        
+            <div style='flex-grow: 1;'>
+            <h3>After</h3>
+            <img src="https://nalanbot-images2.s3.amazonaws.com/tower_03_00000_last.jpg" width="200px"
+                 alt="The cubes are stacked" />
+            </div>
+          </div>
+        
+            <h3>Correct response</h3>
+            <p>Move the orange block on top of the green block. Then, place the white cube on top of the orange.</p>
+        
+            <h3>Correct response</h3>
+            <p>Place the orange block on the green one. Then, place the white one on top of the other two.</p>
+        
+            <h3>Correct response</h3>
+            <p>First keep the orange block on top of the green cube, then move the white cube on top of the orange cube.</p>
+        
+            <h3>Correct response</h3>
+            <p>Take the leftmost cube and stack it on top of the green cube. Then take the last cube and release it on top of the others.</p>
+        </positive-example>
+        
+        <positive-example>
+          <div style="display: flex;">
+            <div style='width: 200px;'>
+            <h3>Before</h3>
+            <img src="https://nalanbot-images2.s3.amazonaws.com/tower_04_00001_first.jpg" width="200px"
+                 alt="The cubes are crumbled" />
+            </div>
+        
+            <div style='flex-grow: 1;'>
+            <h3>After</h3>
+            <img src="https://nalanbot-images2.s3.amazonaws.com/tower_04_00001_last.jpg" width="200px"
+                 alt="The cubes are stacked" />
+            </div>
+          </div>
+        
+            <h3>Correct response</h3>
+            <p>You must take the violet cube and move it on top of the red cube.
+               Thereafter, you grasp the cube at the right side of the scene 
+               and you leave it on top of the two first cubes.
+               Finally, you take the indigo cube and you place it on top of the other cubes.
+            </p>
+        
+            <h3>Correct response</h3>
+            <p>The violet cube must be moved on top of the red cube. Then, the green cube is displaced on top
+               of them, before displacing the last block at the top of the tower.
+            </p>
+        </positive-example>
+        
+        <negative-example>
+          <div style="display: flex;">
+            <div style='width: 200px;'>
+            <h3>Before</h3>
+            <img src="https://nalanbot-images2.s3.amazonaws.com/tower_03_00001_first.jpg" width="200px"
+                 alt="The cubes are crumbled" />
+            </div>
+        
+            <div style='flex-grow: 1;'>
+            <h3>After</h3>
+            <img src="https://nalanbot-images2.s3.amazonaws.com/tower_03_00001_last.jpg" width="200px"
+                 alt="The cubes are stacked" />
+            </div>
+          </div>
+        
+            <h3>Wrong Response</h3>
+            <p>Move the gray cube on top of the yellow one. Then move both cubes on top of last cube.
+            </p>
+        
+            <h3>Why is it wrong?</h3>
+            <p>Two cubes are moved at the same time.</p>
+        
+            &nbsp;<br/>
+            &nbsp;<br/>
+            &nbsp;<br/>
+            &nbsp;<br/>
+            &nbsp;<br/>
+            &nbsp;<br/>
+            &nbsp;<br/>
+            &nbsp;<br/>
+            &nbsp;<br/>
+            &nbsp;<br/>
+            &nbsp;<br/>
+            &nbsp;<br/>
+        </negative-example>
+        
+        <negative-example>
+          <div style="display: flex;">
+            <div style='width: 200px;'>
+            <h3>Before</h3>
+            <img src="https://nalanbot-images2.s3.amazonaws.com/tower_03_00002_first.jpg" width="200px"
+                 alt="The cubes are crumbled" />
+            </div>
+        
+            <div style='flex-grow: 1;'>
+            <h3>After</h3>
+            <img src="https://nalanbot-images2.s3.amazonaws.com/tower_03_00002_last.jpg" width="200px"
+                 alt="The cubes are stacked" />
+            </div>
+          </div>
+        
+            <h3>Wrong Response</h3>
+            <p>The tower is made with a white cube, a gray cube and a blue cube.</p>
+        
+            <h3>Why is it wrong?</h3>
+            <p>This a <b>description</b> of the second image and not a step-by-step instruction.</p>
+            
+            &nbsp;<br/>
+            &nbsp;<br/>
+            &nbsp;<br/>
+            &nbsp;<br/>
+        </negative-example>
+        
+
+    </crowd-instructions>
+
+    <p>Your payments will only be processed if other workers can recreate the tower by following your instructions. 
+    </p>
+
+    <p>We will happily give you a BONUS reward if your instructions are related to the left image.
+    For example, you can sometimes refer to a cube by its position on the image, instead of its color.
+    </p>
+
+    <crowd-text-area auto-focus
+      id="stepByStep"
+      name="stepByStep"
+      placeholder="Fill the field with step-by-step instructions..."
+      required
+      disabled
+      rows="4">
+    </crowd-text-area>
+
+    <form id='results-form' method='post' action='dummy' class='text-center'>
+      <style>
+        .btn {
+          background-color: white;
+          color: black;
+          border: 2px solid #3498DB; /* Blue */
+          border-radius: 2px;
+          padding: 15px 32px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+        }
+        .btn-success {
+          border: 2px solid #4CAF50; /* Green */
+        }
+        .hide {
+          display: none;
+        }
+        button:disabled,
+        button[disabled]{
+          border: 1px solid #999999;
+          background-color: #cccccc;
+          color: #666666;
+        }
+    
+      progress {
+        width: 40%;
+        display: block; /* default: inline-block */
+        margin: 2em auto;
+        padding: 3px;
+        border: 0 none;
+        background: #444;
+        border-radius: 14px;
+      }
+      progress::-moz-progress-bar {
+        border-radius: 12px;
+        background: #3498DB;
+      }
+      /* webkit */
+      @media screen and (-webkit-min-device-pixel-ratio:0) {
+        progress {
+          height: 25px;
+        }
+      }
+      progress::-webkit-progress-bar {
+          background: transparent;
+      }  
+      progress::-webkit-progress-value {  
+        border-radius: 12px;
+        background: #3498DB;
+      } 
+      </style>
+    
+      <progress id="progress-bar" max="99" value="0"></progress>
+    
+      <div class='text-center' id='button-div'>
+        <input type='hidden' value='' name='assignmentId' id='assignmentId'/>
+        <input type='hidden' value='' name='output' id='output'/>
+        <button type='button' id='prev-btn' class='btn hide'>Back</button>
+        <button type='button' id='next-btn' class='btn hide'>Next</button>
+        <button type='submit' class='btn btn-success' id='submit-btn' disabled>          
+          Submit
+        </button>
+      </div>
+    
+    </form>
+    
+    <script>
+      var simpleamt = (function() {
+        
+        // Copied from http://james.padolsey.com/javascript/bujs-1-getparameterbyname/
+        function getUrlParam(name) {
+          var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+          return match ? decodeURIComponent(match[1].replace(/\+/g, ' ')) : null;
+        }
+    
+        function getInput(defaultInput, givenInput) {
+          if (typeof(defaultInput) === 'undefined') defaultInput = null;
+          if (givenInput[0].after.startsWith("http")){
+              return givenInput;
+          } else {
+            console.log(givenInput);
+            return defaultInput;
+          }
+        }
+    
+        function setOutput(output) {
+          $('#output').val(JSON.stringify(output));
+        }
+    
+        function isPreview() {
+          var assignment_id = getUrlParam('assignmentId');
+          if (assignment_id === null) return false;
+          return assignment_id == 'ASSIGNMENT_ID_NOT_AVAILABLE';
+        }
+    
+        function setupSubmit() {
+          var submit_to = getUrlParam('turkSubmitTo');
+          $('#results-form').attr('action', submit_to + '/mturk/externalSubmit');                      
+          $('#assignmentId').val(getUrlParam('assignmentId'));
+        }
+    
+        return {
+          getInput: getInput,
+          setOutput: setOutput,
+          isPreview: isPreview,
+          setupSubmit: setupSubmit,
+        }
+    
+      })();
+    </script>
+
+
+    <script>
+$(function() {
+  // Define default input to be used when developing this HIT.
+  var DEFAULT_INPUT = [
+    { before: 'https://nalanbot-images2.s3.amazonaws.com/tower_03_00000_first.jpg',
+      id: 'test',
+      after: 'https://nalanbot-images2.s3.amazonaws.com/tower_03_00000_last.jpg'
+    },
+    { 
+      before: 'https://nalanbot-images2.s3.amazonaws.com/tower_03_00001_first.jpg',
+      id: 'test',
+      after: 'https://nalanbot-images2.s3.amazonaws.com/tower_03_00001_last.jpg'
+    },
+    { 
+      before: 'https://nalanbot-images2.s3.amazonaws.com/tower_03_00002_first.jpg',
+      id: 'test',
+      after: 'https://nalanbot-images2.s3.amazonaws.com/tower_03_00002_last.jpg'
+    }
+  ];
+  
+  var after1 = '${after1}';
+  var after2 = '${after2}';
+  var after3 = '${after3}';
+  
+  var batch_input = [
+    { 
+      before: '${before1}',
+      id: '${id1}',
+      after: after1,
+    },
+    { 
+      before: '${before2}',
+      id: '${id2}',
+      after: after2,
+      
+    },
+    { 
+      before: '${before3}',
+      id: '${id3}',
+      after: after3,
+    },
+  ];
+  
+  var enabled = false;
+  var idx = 0;
+  var inputs = null;
+  var answers = [];
+  function main() {
+    // Read input to the HIT. In development the default input will be
+    // used, and in deployment actual input will be used.
+    inputs = simpleamt.getInput(DEFAULT_INPUT, batch_input);
+    if (!simpleamt.isPreview()) {
+      enable_ui();
+    }
+    // Initialize answers
+    _.each(inputs, function() { answers.push(''); });
+    // Preload all images
+    _.each(inputs, function(img_url) {
+      var bef = new Image();
+      bef.src = img_url.before;
+      var aft = new Image();
+      aft.src = img_url.after;
+    });
+    render();
+  }
+  function render() {
+    // Set up the image
+    $('#before-container').empty();
+    $('#after-container').empty();
+    $('<img>').attr('src', inputs[idx].before).attr('width', '300px').appendTo($('#before-container'));
+    $('<img>').attr('src', inputs[idx].after).attr('width', '300px').appendTo($('#after-container'));
+    
+    $('#stepByStep').val(answers[idx]);
+    // Refresh the progress bar
+    $('#progress-bar').attr('value', idx + 1);
+    $('#progress-bar').attr('max', inputs.length);
+    // If the UI is enabled, enable or disable the buttons depending on
+    // the index.
+    if (enabled) {
+      var prev_btn = $('#prev-btn');
+      var next_btn = $('#next-btn');
+      var submit_btn = $('#submit-btn');
+      prev_btn.prop('disabled', true);
+      next_btn.prop('disabled', true);
+      prev_btn.css('display', 'none');
+      next_btn.css('display', 'none');
+      submit_btn.css('display', 'none');
+      if (idx > 0) {
+        prev_btn.prop('disabled', false);
+        prev_btn.css('display', 'inline-block');
+      }
+      if (idx < inputs.length - 1) {
+        next_btn.prop('disabled', false);
+        next_btn.css('display', 'inline-block');
+      }
+      if (idx == inputs.length - 1) {
+        submit_btn.css('display', 'inline-block');
+      }
+      
+    }
+  }
+  function set_idx(new_idx) {
+    if (new_idx < 0 || new_idx >= inputs.length) return;
+    answers[idx] = $('#stepByStep').val();
+    idx = new_idx;
+    render();
+  }
+  function submitHandler() {
+    
+    answers[idx] = $('#stepByStep').val();
+    // Construct an object containing the output of this assignment.
+    var outputs = [];
+    var lengths = [];
+    inputs.forEach( (input, i) => {
+      const split = input.before.split("_");
+      const numCubes = split[split.length - 2];
+      const ref = split[split.length - 3];
+      const output = {
+        num_cubes: numCubes,
+        ref: ref,
+        answer: answers[i],
+      };
+      outputs.push(output);
+      lengths.push(output.answer.length);
+    });
+    // Validate the output
+    if (Math.min(...lengths) < 10) {
+      alert('At least one of your answer is too short ;)');
+      return false;
+    } else {
+      simpleamt.setOutput(outputs);
+    }
+  };
+  function enable_ui() {
+    enabled = true;
+    // Enable the UI
+    $('#next-btn').click(function() { set_idx(idx + 1) });
+    $('#prev-btn').click(function() { set_idx(idx - 1) });
+    $('#stepByStep').prop('disabled', false);
+    $('#submit-btn').prop('disabled', false);
+    $('#progress-bar').css('display', 'inline-block');
+    simpleamt.setupSubmit();
+    $('#submit-btn').click(submitHandler);
+  }
+  main();
+});
+    </script>
+</body>
+</html>
